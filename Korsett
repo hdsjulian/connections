@@ -1,0 +1,50 @@
+#define FASTLED_ALLOW_INTERRUPTS 0
+#define FASTLED_INTERRUPT_RETRY_COUNT 1
+
+// Arduino Beat Detector By Damian Peckett 2015
+// License: Public Domain.
+#include "FastLED.h"
+#define NUM_LEDS 20
+#define DATA_PIN D7
+#define COLOR_ORDER RGB
+// Our Global Sample Rate, 5000hz
+CRGB leds[NUM_LEDS];
+int hue1 = 170;
+int hue2 = 245; 
+int val1 = 0;
+int val2 = 255;
+int val1mod = 1;
+int val2mod = -1;
+
+
+void setup() {
+  Serial.begin(9600);
+    FastLED.addLeds<WS2812B, DATA_PIN,GRB>(leds, NUM_LEDS);
+}
+
+void loop() {
+  for (int j = 0; j <10; j++) {
+    leds[j] = CHSV(hue1+j, 255, val1);
+    leds[j+10] = CHSV(hue2+j, 255, val2);
+    FastLED.show();
+  }
+  val1 += val1mod;
+  val2 += val2mod;
+  if (val1 == 255){ 
+  val1mod = -1;
+  }
+  if (val1 == 0) {
+    val1mod = 1;
+  }
+  if (val2 == 255) {
+    val2mod = -1;
+  }
+  if (val2 == 0) {
+    val2mod = 1;
+  }
+  delay(30);
+
+
+
+    
+}
